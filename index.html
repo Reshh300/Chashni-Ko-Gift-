@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Chashni Baby</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           CSS VARIABLES & GLOBAL STYLES
+           ========================================== */
+        :root {
+            --pastel-pink: #ffd1dc;
+            --pastel-peach: #ffdfba;
+            --pastel-lavender: #e6e6fa;
+            --pastel-blue: #bae1ff;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-dark: #4a4a4a;
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background-color: var(--pastel-pink);
+            transition: color 2s ease;
+        }
+
+        /* Prevent scrolling until portal is opened */
+        body.locked {
+            overflow: hidden;
+        }
+
+        h1, h2, h3, .romantic-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
+
+        /* ==========================================
+           BACKGROUND TRANSITION LAYERS
+           ========================================== */
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            opacity: 0;
+            transition: opacity 3s ease-in-out;
+        }
+
+        #bg-day {
+            background: linear-gradient(135deg, var(--pastel-pink) 0%, var(--pastel-peach) 100%);
+            opacity: 1; /* Default visible */
+        }
+
+        #bg-sunset {
+            background: linear-gradient(to bottom, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        }
+
+        #bg-night {
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+        }
+
+        /* Particle Canvas */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ==========================================
+           GLASSMORPHISM UTILITIES
+           ========================================== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 12px 30px;
+            border-radius: 30px;
+            color: inherit;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* ==========================================
+           SECTION STYLES
+           ========================================== */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            will-change: opacity, visibility;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* --- 1. Entry Portal --- */
+        #portal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender));
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease, visibility 1.5s;
+        }
+        #portal h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- 2. Welcome Moment --- */
+        .typing-container {
+            font-size: 1.5rem;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.8;
+            min-height: 120px;
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: currentColor;
+            animation: blink 0.75s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- 3. Memory Path --- */
+        #memories {
+            justify-content: flex-start;
+            padding-top: 10vh;
+        }
+        .memory-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+        @media (min-width: 768px) {
+            .memory-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .memory-card {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .memory-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .memory-content {
+            font-size: 0.95rem;
+            opacity: 0;
+            max-height: 0;
+            transition: opacity 0.5s ease, max-height 0.5s ease;
+        }
+        .memory-card.revealed .memory-content {
+            opacity: 1;
+            max-height: 200px;
+            margin-top: 1rem;
+        }
+        .memory-card.locked {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(100%);
+        }
+        .progress-bar-container {
+            width: 100%;
+            max-width: 800px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin-bottom: 2rem;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            transition: width 0.5s ease;
+        }
+
+        /* --- 4. Mini Interactions --- */
+        .interaction-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+        .gift-box {
+            font-size: 4rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+        }
+        .gift-box:hover { animation: shake 0.5s ease-in-out infinite; }
+        .gift-message {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s, top 0.4s;
+        }
+        .gift-box.opened .gift-message { opacity: 1; top: -60px; }
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        .floating-hearts-area {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        .clickable-heart {
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            animation: floatHeart 3s ease-in-out infinite alternate;
+        }
+        @keyframes floatHeart {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+
+        /* --- 5. Letter Section --- */
+        #letter .glass-card {
+            max-width: 700px;
+            line-height: 2;
+            font-size: 1.1rem;
+            padding: 3rem 2rem;
+        }
+
+        /* --- 6. Final Reveal & Video --- */
+        #reveal { text-align: center; }
+        #reveal h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        .video-container {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1s ease;
+            display: none;
+        }
+        .video-container.active {
+            opacity: 1;
+            transform: scale(1);
+            display: block;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* --- 7. Ending --- */
+        #ending { color: var(--text-light); text-align: center; }
+        #ending h2 { font-size: 2rem; font-style: italic; }
+
+        /* Dynamic Particle CSS generated by JS */
+        .sparkle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: rise linear forwards;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="locked">
+
+    <div id="bg-day" class="bg-layer"></div>
+    <div id="bg-sunset" class="bg-layer"></div>
+    <div id="bg-night" class="bg-layer"></div>
+
+    <div id="particles"></div>
+
+    <section id="portal">
+        <h1 class="romantic-text">something sweet for you chiknussss...</h1>
+        <button class="glass-btn" onclick="enterSurprise()">Enter the Surprise</button>
+    </section>
+
+    <main>
+        <section id="welcome" class="fade-in-section">
+            <div class="typing-container romantic-text" id="welcome-text"></div>
+        </section>
+
+        <section id="memories" class="fade-in-section">
+            <h2 class="romantic-text" style="font-size: 2.5rem; margin-bottom: 1rem;">Our Journey</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="memory-progress"></div>
+            </div>
+            
+            <div class="memory-grid">
+                <div class="glass-card memory-card" onclick="unlockMemory(this, 1)">
+                    <h3 class="romantic-text">1. first time meeting</h3>
+                    <div class="memory-content">it's been one year, and so much yk itti saari baaten, everyday ki itti sari chize, i appreciate you!! .</div>
+                </div>
+                <div class="glass-card memory-card locked" onclick="unlockMemory(this, 2)">
+                    <h3 class="romantic-text">2. Cutie Pie</h3>
+                    <div class="memory-content"> initially it started with something too random, a throwaway manga story 😭✨ aapko send kiya tha and tumne use padha bhi!!! cuteeee</div>
+                </div>
+                <div class="glass-card memory-card locked" onclick="unlockMemory(this, 3)">
+                    <h3 class="romantic-text">3. Jalebi and Chashni</h3>
+                    <div class="memory-content">Yeh naam itta cute and sweet sa haina, 😭🎀 itta zyada just like u.. .</div>
+                </div>
+                <div class="glass-card memory-card locked" onclick="unlockMemory(this, 4)">
+                    <h3 class="romantic-text">4. cute harkate</h3>
+                    <div class="memory-content">TUMHARI HARKATE!!!! vese toh kabhi kabhi bahut sata deti ho but i feel like 🔪 iske bina nind kaha ayegi aapko.</div>
+                </div>
+                <div class="glass-card memory-card locked" onclick="unlockMemory(this, 5)">
+                    <h3 class="romantic-text">5. Appreciation</h3>
+                    <div class="memory-content">jo bhi Ho, you are a cutie pie and will stay so~.</div>
+                </div>
+                <div class="glass-card memory-card locked" onclick="unlockMemory(this, 6)">
+                    <h3 class="romantic-text">6. The Day</h3>
+                    <div class="memory-content">And today,  TUM 18 KI HOGAYI, badi chikni.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactions" class="fade-in-section">
+            <h2 class="romantic-text" style="margin-bottom: 3rem; font-size: 2rem;">Little Things</h2>
+            <div class="interaction-container">
+                
+                <div class="floating-hearts-area">
+                    <div class="clickable-heart" onclick="alert('You are mah pyari si chashni! 💖')" style="animation-delay: 0s;">💖</div>
+                    <div class="clickable-heart" onclick="alert('looking BEAUTIFUL AS USUAL (⁠◔⁠‿⁠◔⁠)! ✨')" style="animation-delay: 1s;">✨</div>
+                    <div class="clickable-heart" onclick="alert('love you! 💕')" style="animation-delay: 2s;">💕</div>
+                </div>
+
+                <div class="gift-box glass-card" onclick="openGift(this)">
+                    🎁
+                    <div class="gift-message romantic-text"> gift chaiye hainnn? 😤 nai milega 😭 bahut sataya hein.</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="letter" class="fade-in-section trigger-sunset">
+            <div class="glass-card">
+                <p class="romantic-text" style="font-size: 1.5rem; margin-bottom: 1rem;">My Chashni Baby,</p>
+                <div id="letter-content">
+                    </div>
+            </div>
+        </section>
+
+        <section id="reveal" class="fade-in-section trigger-night">
+            <h1>Happy Birthday, Chashni Baby</h1>
+            <button class="glass-btn" id="play-btn" onclick="showVideo()">Play Your Surprise</button>
+            
+            <div class="video-container" id="video-box">
+                <iframe src="https://www.youtube.com/embed/nczWIK2axjw?si=OcW-Yib-jCm0vmUj" title="Birthday Surprise" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="ending" class="fade-in-section">
+            <h2 class="romantic-text">This was something special for u.<br><br>i hope so u enjoyed.</h2>
+            <br><br>
+            <p style="font-size: 0.9rem; opacity: 0.7;">Keep scrolling, I'll love you forever.</p>
+        </section>
+    </main>
+
+    <script>
+        /* ==========================================
+           1. PORTAL & WELCOME ANIMATION
+           ========================================== */
+        function enterSurprise() {
+            const portal = document.getElementById('portal');
+            portal.style.opacity = '0';
+            setTimeout(() => {
+                portal.style.visibility = 'hidden';
+                document.body.classList.remove('locked');
+                startWelcomeTyping();
+            }, 1500);
+        }
+
+        const welcomeLines = [
+            "I wanted to make something different...",
+            "Something made only for you...",
+            "This is your chotu sa gift today."
+        ];
+        
+        async function startWelcomeTyping() {
+            const container = document.getElementById('welcome-text');
+            for (let i = 0; i < welcomeLines.length; i++) {
+                await typeText(container, welcomeLines[i]);
+                if (i < welcomeLines.length - 1) {
+                    await sleep(1500); // Pause between lines
+                    container.innerHTML += '<br><br>';
+                }
+            }
+            container.innerHTML += '<span class="cursor"></span>';
+        }
+
+        /* ==========================================
+           2. INTERACTIVE MEMORY PATH
+           ========================================== */
+        let unlockedCount = 1;
+        const totalMemories = 6;
+
+        function unlockMemory(element, index) {
+            if (element.classList.contains('locked')) return;
+            
+            element.classList.add('revealed');
+            
+            const progress = (index / totalMemories) * 100;
+            document.getElementById('memory-progress').style.width = progress + '%';
+
+            if (index < totalMemories) {
+                const nextCard = document.querySelectorAll('.memory-card')[index];
+                if (nextCard) {
+                    setTimeout(() => {
+                        nextCard.classList.remove('locked');
+                    }, 500);
+                }
+            }
+        }
+
+        /* ==========================================
+           3. MINI INTERACTIONS
+           ========================================== */
+        function openGift(element) {
+            element.classList.toggle('opened');
+        }
+
+        /* ==========================================
+           4. LETTER TYPING (Triggered by Scroll)
+           ========================================== */
+        
+        // Converted your poem to a single string with HTML line breaks 
+        const letterText = "love u as a person<br>love u for the way you act<br>love u for the kindness in your eyes<br>love u for the softness ( chiknus 🤭) in your voice<br>love u when you speak<br>love u when you stutter or sighs<br>love u on days you feel good<br>love u on days you feel tired<br>love u when you laugh zorrr seee<br>love u when you smile<br>love u when you understand everything<br>love u when you feel confused ( paglu zie)<br>love u when you are calm<br>love u when you are overwhelmed<br>love u when you are mature ( badi chashni)<br>love u when you are childish ( chutki chashni)<br>love u when you are serious( serious si chashni)<br>love u when you are playful ( satane wali chashni ╥﹏╥)<br>love u when you are confident<br>love u when you talk endlessly<br>love u when you show silence<br>love u when you care<br>love u when you are happy.<br>love u when sadness visits you ( pitti hogi)<br>love u when you overthink<br>love u when your mind finally rests<br>love u when you are patient<br>love u when you get impatient<br>love u when you tease me ( zyada nai okie dokie)<br>love u when you try your best<br>love u even when you feel you failed<br>love u when you are strong for others<br>love u when you need someone to be strong for you<br>love u when you glow with happiness ( chamkili chashni)<br>love u when you hide the rough<br>love u when you dream big<br>love u when you fear the future<br>love u when you speak your heart<br>love u when you hold things inside<br>love u when you are stubborn<br>love u when you are full of energy<br>love u when you just want to rest ( thak gayi bacchi) <br>love u when you are focused<br>love u when you get distracted<br>love u when you care for everyone<br>love u when you are fearless<br>love u when you feel afraid<br>love u when you try something new<br>love u when you return to what feels safe<br>love u when you are logical<br>love u when you follow your heart<br>love u when you are patient with me<br>love u when you get annoyed with me<br>love u when you understand me without words<br>love u when we misunderstand each other<br>love u when you are proud of yourself.<br>love u when you feel unsure of who you are.<br>love u when you joke around<br>love u when you become thoughtful<br>love u when you speak softlyyyyyyy<br>love u when your excitement takes over<br>love u when you trust<br>love u when you guard your heart<br>love u when you are full of confidence<br>love u when you need encouragement.<br>love u when you celebrate little things<br>love u when you are expressive<br>love u when you stay quiet<br>love u when you lead<br>love u when you follow<br>love u when you laugh at yourself<br>love u when you take yourself seriously<br>love u when you are curious<br>love u when you feel lost<br>love u when you are hopeful<br>love u when hope feels far away<br>love u when you open up slowlyyyyyy<br>love u when you are gentle<br>love u when you are fierce ( takatvar chikni 🤭🔪)<br>love u when you shine<br>love u when you succeed<br>love u when you start again after failing<br>love u when you are certain<br>love u when you ask questions<br>love u when you comfort others<br>love u when you need comfort<br>love u when you stay strong<br>love u when you grow<br>love u when you are still learning<br>love u when you change<br>love u when you remain yourself<br>love u in your best moments<br>love u in your imperfect ones<br>love u in your silence<br>love u in every season of your life<br>love u in every version of who you become<br>love u beyond moods and moments<br>love u beyond reasons and explanations<br>love u not for perfection, but for reality<br>love u simply because you are you mah chashni zie";
+        
+        let letterTyped = false;
+
+        function startLetterTyping() {
+            if (letterTyped) return;
+            letterTyped = true;
+            const container = document.getElementById('letter-content');
+            // Changed speed to 15 so the long poem reads at a good pace
+            typeText(container, letterText, 15); 
+        }
+
+        /* ==========================================
+           5. SCROLL OBSERVER (Animations & Colors)
+           ========================================== */
+        const observerOptions = { threshold: 0.3 };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    
+                    if (entry.target.classList.contains('trigger-sunset')) {
+                        document.getElementById('bg-sunset').style.opacity = '1';
+                        document.getElementById('bg-night').style.opacity = '0';
+                        document.body.style.color = 'var(--text-dark)';
+                        startLetterTyping();
+                    }
+                    if (entry.target.classList.contains('trigger-night')) {
+                        document.getElementById('bg-night').style.opacity = '1';
+                        document.body.style.color = 'var(--text-light)';
+                    }
+                    if (entry.target.id === 'memories' || entry.target.id === 'interactions') {
+                        document.getElementById('bg-sunset').style.opacity = '0';
+                        document.getElementById('bg-night').style.opacity = '0';
+                        document.body.style.color = 'var(--text-dark)';
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        /* ==========================================
+           6. FINAL REVEAL (Video)
+           ========================================== */
+        function showVideo() {
+            const btn = document.getElementById('play-btn');
+            const videoBox = document.getElementById('video-box');
+            btn.style.display = 'none';
+            videoBox.classList.add('active');
+            
+            setTimeout(() => {
+                videoBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+
+        /* ==========================================
+           7. UTILITIES & PARTICLES
+           ========================================== */
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Updated typeText function to handle the <br> tags properly!
+        async function typeText(element, text, speed = 50) {
+            let i = 0;
+            while (i < text.length) {
+                if (text.substring(i, i + 4) === '<br>') {
+                    element.innerHTML += '<br>';
+                    i += 4;
+                } else {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                }
+                await sleep(speed);
+            }
+        }
+
+        // Particle System
+        function createParticle() {
+            const particlesContainer = document.getElementById('particles');
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            
+            const size = Math.random() * 4 + 2 + 'px';
+            sparkle.style.width = size;
+            sparkle.style.height = size;
+            sparkle.style.left = Math.random() * 100 + 'vw';
+            sparkle.style.animationDuration = Math.random() * 3 + 4 + 's'; 
+            
+            if (document.getElementById('bg-night').style.opacity === '1') {
+                sparkle.style.background = '#fff';
+                sparkle.style.boxShadow = '0 0 10px #fff';
+            } else {
+                sparkle.style.background = 'rgba(255, 255, 255, 0.6)';
+            }
+
+            particlesContainer.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 7000);
+        }
+
+        setInterval(createParticle, 300);
+
+    </script>
+</body>
+</html>
